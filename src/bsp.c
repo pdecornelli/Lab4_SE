@@ -197,11 +197,11 @@ void BSP_Init(void) {
 
 uint16_t LED_PIN[] = { GPIO_PIN_12, GPIO_PIN_13, GPIO_PIN_14, GPIO_PIN_15,
 		GPIO_PIN_0, GPIO_PIN_1, GPIO_PIN_2, GPIO_PIN_3,
-		GPIO_PIN_6, GPIO_PIN_7, GPIO_PIN_10, GPIO_PIN_11,GPIO_PIN_0, GPIO_PIN_1 , GPIO_PIN_4 };
+		GPIO_PIN_6, GPIO_PIN_7, GPIO_PIN_10, GPIO_PIN_11};
 
 GPIO_TypeDef* LED_PORT[] = { GPIOD, GPIOD, GPIOD, GPIOD, GPIOD, GPIOD, GPIOD,
 		GPIOD, GPIOD, GPIOD, GPIOD,
-		GPIOD,GPIOB,GPIOB,GPIOB };
+		GPIOD };
 
 void BSP_LED() {
 	GPIO_InitTypeDef GPIO_InitStruct;
@@ -217,22 +217,6 @@ void BSP_LED() {
 	//GPIO_InitStruct.Alternate = GPIO_AF7_USART3;
 	HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
-
-	__GPIOB_CLK_ENABLE()
-	;
-
-	GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_4;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_PULLUP;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	//GPIO_InitStruct.Alternate = GPIO_AF7_USART3;
-	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-}
-
-void led_setBright(LED_typedef led, uint8_t value) {
-	if (led < 4) {
-		*leds_pwm[led] = 1000 * value / 100;
-	}
 }
 
 void led_on(LED_typedef Led) {
@@ -240,10 +224,6 @@ void led_on(LED_typedef Led) {
 }
 void led_off(LED_typedef Led) {
 	HAL_GPIO_WritePin(LED_PORT[Led], LED_PIN[Led], GPIO_PIN_RESET);
-}
-void led_toggle(LED_typedef Led) {
-
-	HAL_GPIO_TogglePin(LED_PORT[Led], LED_PIN[Led]);
 }
 
 void BSP_ADC_Init(void) {
@@ -289,11 +269,6 @@ void BSP_ADC_Init(void) {
 	HAL_ADC_ConfigChannel(&ADC_HandleStruct, &ChannelConfStruct);
 	HAL_ADC_Start(&ADC_HandleStruct);
 
-}
-
-uint8_t BSP_GetBrightness(void) {
-	HAL_ADC_Start(&ADC_HandleStruct);
-	return (uint8_t) (HAL_ADC_GetValue(&ADC_HandleStruct) * 100 / 4095);
 }
 
 void TIM2_IRQHandler(void) {
